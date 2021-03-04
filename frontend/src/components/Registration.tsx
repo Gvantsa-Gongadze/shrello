@@ -1,5 +1,5 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
-import BlueButton from './style/Buttons'
+import SubmitButton from './style/Buttons'
 
 const layout = {
     labelCol: { span: 8 },
@@ -68,7 +68,7 @@ const Registration = () => {
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
-                        <BlueButton name={'Sign up'}/>
+                        <SubmitButton name={'Sign up'}/>
                     </Form.Item>
                     <a href="/login">Already have an account? Log In</a>
                 </Form>
