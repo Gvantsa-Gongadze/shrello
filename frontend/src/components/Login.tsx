@@ -18,7 +18,7 @@ const Login = () => {
     };
 
     return (
-        <Space {...layout}>
+        <Space>
             <Card 
                 title="Log in to Shrello" 
                 style={{ width: 500 }}
