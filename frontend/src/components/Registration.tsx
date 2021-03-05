@@ -1,4 +1,5 @@
-import { Form, Input, Button, Checkbox, Card, Space } from 'antd';
+import { Form, Input, Checkbox, Card, Space } from 'antd'
+import SubmitButton from './style/Buttons'
 
 const layout = {
     labelCol: { span: 8 },
@@ -67,9 +68,7 @@ const Registration = () => {
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">
-                            Sign up
-                        </Button>
+                        <SubmitButton name={'Sign up'}/>
                     </Form.Item>
                     <a href="/login">Already have an account? Log In</a>
                 </Form>
