@@ -6,19 +6,19 @@ export type BoardDocument = Board & Document;
 
 @Schema()
 export class Board {
-    @Prop()
+    @Prop({ required: true})
     owner: User;
 
-    @Prop()
+    @Prop({ required: true })
     title: String;
 
-    @Prop()
+    @Prop({ default: '' })
     description: String;
 
-    @Prop()
+    @Prop({ default: null })
     image: String;
 
-    @Prop()
+    @Prop({ default: null })
     color: String;
 }
 
