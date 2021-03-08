@@ -34,30 +34,29 @@ const Registration = () => {
                     <Form.Item
                         label="Your name"
                         name="name"
-                        rules={[{ required: true, message: 'Please input your name!' }]}
-                    >
-                        <Input />
+                        >
+                        <Input type="text" />
                     </Form.Item>
                     <Form.Item
                         label="Your Email"
-                        name="name"
+                        name="email"
                         rules={[{ required: true, message: 'Please input your Email!' }]}
                     >
-                        <Input />
+                        <Input type="email" />
                     </Form.Item>
                     <Form.Item
                         label="Password"
                         name="password"
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
-                        <Input />
+                        <Input type="text" minLength={6} />
                     </Form.Item>
                     <Form.Item
                         label="Repeat Password"
-                        name="password"
+                        name="repeatPassword"
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
-                        <Input />
+                        <Input type="text" minLength={6} />
                     </Form.Item>
                     <Form.Item 
                         {...tailLayout}
