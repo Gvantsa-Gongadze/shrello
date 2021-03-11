@@ -1,5 +1,6 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from './style/Buttons'
+import axios from 'axios';
 
 const layout = {
     labelCol: { span: 8 },
@@ -10,8 +11,14 @@ const tailLayout = {
 };
 
 const Registration = () => {
-    const onFinish = (values: any) => {
+    const onFinish = async (values: any) => {
         console.log('Success:', values);
+        axios.post("http://localhost:3000/users", values)
+        .then(res => {
+            console.log(res.config.data);
+        }).catch(e => {
+            console.log(e)
+        })
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -33,7 +40,13 @@ const Registration = () => {
                 >
                     <Form.Item
                         label="Your name"
-                        name="name"
+                        name="firstName"
+                        >
+                        <Input type="text" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Your last name"
+                        name="lastName"
                         >
                         <Input type="text" />
                     </Form.Item>
@@ -47,13 +60,6 @@ const Registration = () => {
                     <Form.Item
                         label="Password"
                         name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input type="text" minLength={6} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Repeat Password"
-                        name="repeatPassword"
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
                         <Input type="text" minLength={6} />
