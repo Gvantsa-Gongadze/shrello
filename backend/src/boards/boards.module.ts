@@ -8,5 +8,5 @@ import { Board, BoardSchema } from './schemas/board.schema';
     imports: [MongooseModule.forFeature([{ name: Board.name, schema: BoardSchema }])],
     controllers: [BoardsController],
     providers: [BoardsService],
-  })
-  export class BoardsModule {}
+})
+export class BoardsModule {}
