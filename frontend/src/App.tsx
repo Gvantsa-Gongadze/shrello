@@ -15,7 +15,7 @@ function App() {
                 <Switch>
                     <Route path="/login" component={Login} />
                     <Route path="/registration" component={Registration} />
-                    <Route path="/email-confirmation" component={EmailConfirmation} />
+                    <Route path="/email-confirmation/:id" component={EmailConfirmation} />
                 </Switch>
             </div>
         </Router>

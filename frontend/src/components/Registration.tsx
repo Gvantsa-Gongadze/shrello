@@ -1,6 +1,7 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from './style/Buttons'
 import axios from 'axios';
+import React from 'react';
 
 const layout = {
     labelCol: { span: 8 },
@@ -9,24 +10,27 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
+class Registration extends React.Component{
 
-const Registration = () => {
-    const onFinish = async (values: any) => {
-        console.log('Success:', values);
+    onFinish = async (values: any) => {
         axios.post("http://localhost:3000/users", values)
         .then(res => {
-            console.log(res.config.data);
-        }).catch(e => {
+            if(res.request.statusText === 'Created') {
+                alert("Message Sent. Please check your email for confirmation!"); 
+            } else if(res.request.statusText === 'fail'){
+                alert("Message failed to send. Try again!")
+            }
+        }).catch(e => [
             console.log(e)
-        })
+        ])
     };
 
-    const onFinishFailed = (errorInfo: any) => {
+    onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-
-    return (
-        <Space>
+    render() {
+        return (
+          <Space>
             <Card 
                 title="Sign up for your account" 
                 style={{ width: 500 }}
@@ -35,8 +39,8 @@ const Registration = () => {
                     {...layout}
                     name='basic'
                     initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
+                    onFinish={this.onFinish}
+                    onFinishFailed={this.onFinishFailed}
                 >
                     <Form.Item
                         label="Your name"
@@ -79,7 +83,8 @@ const Registration = () => {
                 </Form>
             </Card>
         </Space>
-    )
+      )
+    }
 }
 
 export default Registration
