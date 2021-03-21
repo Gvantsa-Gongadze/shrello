@@ -5,7 +5,7 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-    @Prop({ required: true })
+    @Prop({ required: true, unique: true })
     email: string;
 
     @Prop({ required: true })
@@ -15,10 +15,19 @@ export class User {
     profile_picture: string;
 
     @Prop()
-    firstName: String
+    firstName: string
 
     @Prop()
-    lastName: String
+    lastName: string
+
+    @Prop()
+    id: string
+
+    @Prop({default: false})
+    confirmed: Boolean
+
+    @Prop()
+    token: string
 
     @Prop()
     boards: []
