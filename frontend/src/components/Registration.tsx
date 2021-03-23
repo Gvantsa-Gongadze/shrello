@@ -1,5 +1,6 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from './style/Buttons'
+import { message } from 'antd';
 import axios from 'axios';
 import React from 'react';
 
@@ -10,27 +11,25 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
-class Registration extends React.Component{
-
-    onFinish = async (values: any) => {
-        axios.post("http://localhost:3000/users", values)
+const Registration = () => {
+    const onFinish = async (values: any) => {
+        await axios.post("http://localhost:3000/users", values)
         .then(res => {
             if(res.request.statusText === 'Created') {
-                alert("Message Sent. Please check your email for confirmation!"); 
+                message.info('Message Sent. Please check your email for confirmation!');
             } else if(res.request.statusText === 'fail'){
-                alert("Message failed to send. Try again!")
+                message.info('Message failed to send. Try again!');
             }
         }).catch(e => [
             console.log(e)
         ])
     };
 
-    onFinishFailed = (errorInfo: any) => {
+    const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-    render() {
-        return (
-          <Space>
+    return (
+        <Space>
             <Card 
                 title="Sign up for your account" 
                 style={{ width: 500 }}
@@ -39,8 +38,8 @@ class Registration extends React.Component{
                     {...layout}
                     name='basic'
                     initialValues={{ remember: true }}
-                    onFinish={this.onFinish}
-                    onFinishFailed={this.onFinishFailed}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
                         label="Your name"
@@ -83,8 +82,7 @@ class Registration extends React.Component{
                 </Form>
             </Card>
         </Space>
-      )
-    }
+    )
 }
 
 export default Registration

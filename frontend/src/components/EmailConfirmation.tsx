@@ -1,17 +1,20 @@
+import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const EmailConfirmation = () => {
+function EmailConfirmation() {
     const { id } = useParams<{ id: string }>();
+    const [confirmed, setConfirmed] = useState({confirmed: false})
 
-    axios.put(`http://localhost:3000/users/${id}`, {confirmed: true})
-    .catch(e => {
-        console.log(e);
-    })
+    useEffect(() => {
+        axios.put(`http://localhost:3000/users/${id}`, {confirmed: true}).then(res => {
+            setConfirmed({confirmed: res.data.confirmed});
+        })
+    }, [id]);
 
     return(
         <div>
-            congratulations you have been successfully registered
+            Congratulations, you have been successfully registered
         </div>
     )
 }
