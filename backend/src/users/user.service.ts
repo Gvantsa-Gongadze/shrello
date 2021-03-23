@@ -22,7 +22,7 @@ export class UsersService {
         return this.userModel.find().exec();
     }
 
-    async findOne(@Param(':id') id) {
+    async findOne(@Param(':id') id: number | string) {
         const users = await this.userModel.find().exec()
         const user = users.filter(user => user._id == id)
         return user
