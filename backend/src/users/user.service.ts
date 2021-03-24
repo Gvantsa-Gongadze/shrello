@@ -24,7 +24,7 @@ export class UsersService {
 
     async findOne(@Param(':id') id: number | string) {
         const users = await this.userModel.find().exec()
-        const user = users.filter(user => user._id == id)
+        const user = users.filter(user => user._id.toString() === id)
         return user
     }
 
