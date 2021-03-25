@@ -11,17 +11,15 @@ const tailLayout = {
 };
 
 const Login = () => {
-    const onFinish = async (values: any) => {
+    const onFinish = (values: any) => {
         if(!values.confirmed) {
             console.log('Success:', values);
         }
-        const users = await axios.get("http://localhost:3000/users", values)
+        const users = axios.get("http://localhost:3000/users", values)
         console.log(users)
-
-        await axios.put("http://localhost:3000/users/604a8ec7b3714495913f00d8", values)
     };
 
-    const onFinishFailed = async (errorInfo: any) => {
+    const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
 

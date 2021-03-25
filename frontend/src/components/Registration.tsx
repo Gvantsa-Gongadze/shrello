@@ -13,16 +13,16 @@ const tailLayout = {
 };
 const Registration = () => {
     const onFinish = async (values: any) => {
-        await axios.post("http://localhost:3000/users", values)
-        .then(res => {
-            if(res.request.statusText === 'Created') {
+        try {
+            const res = await axios.post("http://localhost:3000/users", values)
+            if(res.statusText === 'Created') {
                 message.info('Message Sent. Please check your email for confirmation!');
-            } else if(res.request.statusText === 'fail'){
+            } else if(res.statusText === 'fail'){
                 message.info('Message failed to send. Try again!');
             }
-        }).catch(e => [
-            console.log(e)
-        ])
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {

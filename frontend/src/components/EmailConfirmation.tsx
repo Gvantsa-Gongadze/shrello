@@ -4,13 +4,14 @@ import { useParams } from "react-router-dom";
 
 function EmailConfirmation() {
     const { id } = useParams<{ id: string }>();
-    const [confirmed, setConfirmed] = useState({confirmed: false})
+    const [confirmed, setConfirmed] = useState(false)
 
     useEffect(() => {
         axios.put(`http://localhost:3000/users/${id}`, {confirmed: true}).then(res => {
-            setConfirmed({confirmed: res.data.confirmed});
+            setConfirmed(res.data.confirmed);
+            console.log(confirmed);
         })
-    }, [id]);
+    });
 
     return(
         <div>
