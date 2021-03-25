@@ -2,8 +2,8 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
-import { SendEmail } from '../utils/SendEmail'
-import { CreateConfirmationUrl } from '../utils/CreateConfirmationUrl'
+import { sendEmail } from '../utils/SendEmail'
+import { createConfirmationUrl } from '../utils/CreateConfirmationUrl'
 
 @Controller('users')
 export class UsersController {
@@ -12,8 +12,8 @@ export class UsersController {
     @Post()
     async create(@Body() createUserDto: CreateUserDto) {
         const user = await this.usersService.create(createUserDto);
-        const url = CreateConfirmationUrl(user['_id'])
-        await SendEmail(user.email, url)
+        const url = createConfirmationUrl(user['_id'])
+        await sendEmail(user.email, url)
     }
 
     @Get()

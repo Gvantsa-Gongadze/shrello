@@ -28,8 +28,7 @@
     "bcrypt": "^5.0.1",
     "mongoose": "^5.11.19",
     "nodemailer": "^6.5.0",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.6",
