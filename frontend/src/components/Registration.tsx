@@ -14,10 +14,8 @@ const tailLayout = {
 const Registration = () => {
     const onFinish = async (values: any) => {
         try {
-            const res = await axios.post("http://localhost:3000/users", values)
-            if (res.statusText === 'Created') {
-                message.info('Message Sent. Please check your email for confirmation!');
-            }
+            await axios.post("http://localhost:3000/users", values)
+            message.info('Message Sent. Please check your email for confirmation!');
         } catch (error) {
             message.info('Message failed to send. Try again!');
             console.log(error)
