@@ -11,12 +11,16 @@ const tailLayout = {
 };
 
 const Login = () => {
-    const onFinish = (values: any) => {
-        if(!values.confirmed) {
-            console.log('Success:', values);
+    const onFinish = async (values: any) => {
+        try {
+            if(!values.confirmed) {
+                console.log('Success:', values);
+                const users = await axios.get("http://localhost:3000/users", values)
+                console.log(users)
+            }
+        } catch (error) {
+            console.log(error)
         }
-        const users = axios.get("http://localhost:3000/users", values)
-        console.log(users)
     };
 
     const onFinishFailed = (errorInfo: any) => {
