@@ -1,5 +1,6 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from './style/Buttons'
+import axios from 'axios';
 
 const layout = {
     labelCol: { span: 8 },
@@ -10,8 +11,16 @@ const tailLayout = {
 };
 
 const Login = () => {
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
+    const onFinish = async (values: any) => {
+        try {
+            if(!values.confirmed) {
+                console.log('Success:', values);
+                const users = await axios.get("http://localhost:3000/users", values)
+                console.log(users)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {

@@ -1,5 +1,8 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from './style/Buttons'
+import { message } from 'antd';
+import axios from 'axios';
+import React from 'react';
 
 const layout = {
     labelCol: { span: 8 },
@@ -8,16 +11,20 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
-
 const Registration = () => {
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
+    const onFinish = async (values: any) => {
+        try {
+            await axios.post("http://localhost:3000/users", values)
+            message.info('Message Sent. Please check your email for confirmation!');
+        } catch (error) {
+            message.info('Message failed to send. Try again!');
+            console.log(error)
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-
     return (
         <Space>
             <Card 
@@ -33,31 +40,29 @@ const Registration = () => {
                 >
                     <Form.Item
                         label="Your name"
-                        name="name"
-                        rules={[{ required: true, message: 'Please input your name!' }]}
-                    >
-                        <Input />
+                        name="firstName"
+                        >
+                        <Input type="text" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Your last name"
+                        name="lastName"
+                        >
+                        <Input type="text" />
                     </Form.Item>
                     <Form.Item
                         label="Your Email"
-                        name="name"
+                        name="email"
                         rules={[{ required: true, message: 'Please input your Email!' }]}
                     >
-                        <Input />
+                        <Input type="email" />
                     </Form.Item>
                     <Form.Item
                         label="Password"
                         name="password"
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Repeat Password"
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input />
+                        <Input type="text" minLength={6} />
                     </Form.Item>
                     <Form.Item 
                         {...tailLayout}
