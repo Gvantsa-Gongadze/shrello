@@ -28,7 +28,6 @@ export class UsersController {
 
     @Put(':id')
     update(@Param('id') id: string, @Body() createUserDto: CreateUserDto) {
-        const users = this.usersService.updateById(id, createUserDto)
-        return users;
+        return this.usersService.updateById(id, createUserDto)
     }
 }
