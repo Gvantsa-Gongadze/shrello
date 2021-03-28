@@ -13,11 +13,16 @@ const tailLayout = {
 const Login = () => {
     const onFinish = async (values: any) => {
         try {
-            if(!values.confirmed) {
-                console.log('Success:', values);
-                const users = await axios.get("http://localhost:3000/users", values)
-                console.log(users)
+            const user = await axios.get(`http://localhost:3000/users`, {
+                params: {
+                    password: values.password,
+                    email: values.username
+                }
+            })
+            if(user.data !== undefined ) {
+                window.location.href = `http://localhost:3200/home`;
             }
+            console.log(user.data)
         } catch (error) {
             console.log(error)
         }
