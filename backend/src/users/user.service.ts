@@ -29,24 +29,19 @@ export class UsersService {
     }
 
     async findOne(@Param() params) {
-        let user = null;
-        let comapre = false;
-        if(params.password && params.email) {
-            try {
-                user = await this.userModel.findOne({email: params.email})
-            } catch(e) {
-                console.log(e)
-            }
+        if (!params.password || !params.email) {
+            return null
+        }
 
-            try {
-                comapre = await bcrypt.compare(params.password, user.password)
-            } catch(e) {
-                console.log(e)
-            }
+        try {
+            const user = await this.userModel.findOne({email: params.email})
+            const compare = await bcrypt.compare(params.password, user.password)
 
-            if(comapre) {
-                return user
+            if(compare) {
+                return user.token
             }
+        } catch(e) {
+            console.log(e)
         }
     }
 
