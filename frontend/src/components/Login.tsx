@@ -1,5 +1,6 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from './style/Buttons'
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 const layout = {
@@ -11,6 +12,7 @@ const tailLayout = {
 };
 
 const Login = () => {
+    const history = useHistory();
     const onFinish = async (values: any) => {
         try {
             const user = await axios.get(`http://localhost:3000/users`, {
@@ -19,10 +21,9 @@ const Login = () => {
                     email: values.username
                 }
             })
-            if(user.data !== undefined ) {
-                window.location.href = `http://localhost:3200/home`;
+            if(user.data) {
+                history.push('/home');
             }
-            console.log(user.data)
         } catch (error) {
             console.log(error)
         }
