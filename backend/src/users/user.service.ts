@@ -1,7 +1,7 @@
 import { Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 
@@ -24,28 +24,30 @@ export class UsersService {
 
     async findById(@Param(':id') id: number | string) {
         const users = await this.userModel.find().exec()
-        const user = users.filter(user => user._id.toString() === id)
-        return user
+        return users.filter(user => user._id.toString() === id)
     }
 
-    async findOne(@Param() params) {
+    async login(@Param() params: LoginUserDto) {
         if (!params.password || !params.email) {
             return null
         }
 
         try {
             const user = await this.userModel.findOne({email: params.email})
-            const compare = await bcrypt.compare(params.password, user.password)
+            const isPasswordCorrect = await bcrypt.compare(params.password, user.password)
+            const newToken = await bcrypt.hash(user.password, 7)
 
-            if(compare) {
-                return user.token
+            if(isPasswordCorrect) {
+                return newToken
+            } else {
+                throw new Error('Username / password combination is incorrect.');
             }
         } catch(e) {
             console.log(e)
         }
     }
 
-    async updateById(@Param(':id') id, updateUser) {
+    async updateById(@Param(':id') id, updateUser: UpdateUserDto) {
         const updateUserDto = await this.findById(id);
         const updateKeys = Object.keys(updateUser);
         updateKeys.map(updateKey => {
