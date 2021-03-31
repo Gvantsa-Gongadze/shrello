@@ -1,6 +1,7 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from './style/Buttons'
 import { useHistory } from "react-router-dom";
+import { message } from 'antd';
 import axios from 'axios';
 
 const layout = {
@@ -10,19 +11,26 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
+interface loginValue {
+    password: String;
+    remember: Boolean;
+    username: String;
+}
 
 const Login = () => {
     const history = useHistory();
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: loginValue) => {
         try {
-            const user = await axios.get(`http://localhost:3000/users`, {
-                params: {
+            const user = await axios.post(`http://localhost:3000/users`, {
+                login: {
                     password: values.password,
                     email: values.username
                 }
             })
             if(user.data) {
                 history.push('/home');
+            } else {
+                message.info('username / password is incorrect!');
             }
         } catch (error) {
             console.log(error)
