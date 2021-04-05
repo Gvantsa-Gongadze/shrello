@@ -23,8 +23,7 @@ export class UsersService {
     }
 
     async findById(@Param(':id') id: number | string) {
-        const users = await this.userModel.find().exec()
-        return users.filter(user => user._id.toString() === id)
+        return await this.userModel.findById(id).exec()
     }
 
     async login(@Param() params: LoginUserDto) {
@@ -35,15 +34,12 @@ export class UsersService {
         try {
             const user = await this.userModel.findOne({email: params.email})
             const isPasswordCorrect = await bcrypt.compare(params.password, user.password)
-            const newToken = await bcrypt.hash(user.password, 7)
 
             if(isPasswordCorrect) {
-                return newToken
-            } else {
-                throw new Error('Username / password combination is incorrect.');
+                return await bcrypt.hash(user.password, 7)
             }
         } catch(e) {
-            console.log(e)
+            throw new Error('Username / password combination is incorrect.');
         }
     }
 
