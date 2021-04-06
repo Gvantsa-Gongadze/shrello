@@ -35,9 +35,11 @@ export class UsersService {
             const user = await this.userModel.findOne({email: params.email})
             const isPasswordCorrect = await bcrypt.compare(params.password, user.password)
 
-            if(isPasswordCorrect) {
-                return await bcrypt.hash(user.password, 7)
+            if(!isPasswordCorrect) {
+                throw new Error('Username / password combination is incorrect.');
             }
+            return await bcrypt.hash(user.password, 7);
+
         } catch(e) {
             throw new Error('Username / password combination is incorrect.');
         }
@@ -47,10 +49,10 @@ export class UsersService {
         const updateUserDto = await this.findById(id);
         const updateKeys = Object.keys(updateUser);
         updateKeys.map(updateKey => {
-            if(updateUserDto[0][updateKey] !== undefined) {
-                updateUserDto[0][updateKey] = updateUser[updateKey]
+            if(updateUserDto[updateKey] !== undefined) {
+                updateUserDto[updateKey] = updateUser[updateKey]
             }
         })
-        return updateUserDto[0].save()
+        return updateUserDto.save()
     }
 }
