@@ -22,10 +22,8 @@ const Login = () => {
     const onFinish = async (values: loginValue) => {
         try {
             const user = await axios.post(`http://localhost:3000/users`, {
-                login: {
-                    password: values.password,
-                    email: values.username
-                }
+                password: values.password,
+                email: values.username
             })
             if(user.data) {
                 history.push('/home');
