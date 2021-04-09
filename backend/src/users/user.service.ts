@@ -1,4 +1,4 @@
-import { Injectable, Param } from '@nestjs/common';
+import { Delete, Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
@@ -11,7 +11,7 @@ export class UsersService {
         @InjectModel(User.name) private userModel: Model<UserDocument>,
     ) {}
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
+    async createUser(createUserDto: CreateUserDto): Promise<User> {
         createUserDto.password = await bcrypt.hash(createUserDto.password, 8)
         createUserDto.token = await bcrypt.hash(createUserDto.password, 7)
         const createdUser = new this.userModel(createUserDto);
