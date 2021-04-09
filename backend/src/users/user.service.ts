@@ -1,7 +1,7 @@
-import { Injectable, Param, ParseIntPipe } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 
@@ -22,20 +22,37 @@ export class UsersService {
         return this.userModel.find().exec();
     }
 
-    async findOne(@Param(':id') id: number | string) {
-        const users = await this.userModel.find().exec()
-        const user = users.filter(user => user._id.toString() === id)
-        return user
+    async findById(@Param(':id') id: number | string) {
+        return await this.userModel.findById(id).exec()
     }
 
-    async updateById(@Param(':id') id, updateUser) {
-        const updateUserDto = await this.findOne(id)
+    async login(@Param() params: LoginUserDto) {
+        if (!params.password || !params.email) {
+            return null
+        }
+
+        try {
+            const user = await this.userModel.findOne({email: params.email})
+            const isPasswordCorrect = await bcrypt.compare(params.password, user.password)
+
+            if(!isPasswordCorrect) {
+                throw new Error('Username / password combination is incorrect.');
+            }
+            return await bcrypt.hash(user.password, 7);
+
+        } catch(e) {
+            throw new Error('Username / password combination is incorrect.');
+        }
+    }
+
+    async updateById(@Param(':id') id, updateUser: UpdateUserDto) {
+        const updateUserDto = await this.findById(id);
         const updateKeys = Object.keys(updateUser);
         updateKeys.map(updateKey => {
-            if(updateUserDto[0][updateKey] !== undefined) {
-                updateUserDto[0][updateKey] = updateUser[updateKey]
+            if(updateUserDto[updateKey] !== undefined) {
+                updateUserDto[updateKey] = updateUser[updateKey]
             }
         })
-        return updateUserDto[0].save()
+        return updateUserDto.save()
     }
 }
