@@ -1,5 +1,6 @@
-import { Form, Input, Checkbox, Card, Space } from 'antd'
-import SubmitButton from './style/Buttons'
+import { Form, Input, Checkbox, Card, Space } from 'antd';
+import { useHistory } from "react-router-dom";
+import SubmitButton from './style/Buttons';
 import { message } from 'antd';
 import axios from 'axios';
 import React from 'react';
@@ -12,10 +13,16 @@ const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
 const Registration = () => {
+    const history = useHistory();
     const onFinish = async (values: any) => {
         try {
-            await axios.put("http://localhost:3000/users", values)
-            message.info('Message Sent. Please check your email for confirmation!');
+            const user = await axios.post("http://localhost:3000/users", values);
+            if(!user.data) {
+                message.info('Something went wrong. Try again');
+            }
+            localStorage.setItem('token', user.data.token);
+            history.push('/home');
+            // message.info('Message Sent. Please check your email for confirmation!');
         } catch (error) {
             message.info('Message failed to send. Try again!');
             console.log(error)
