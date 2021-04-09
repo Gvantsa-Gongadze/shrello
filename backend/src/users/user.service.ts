@@ -11,9 +11,13 @@ export class UsersService {
         @InjectModel(User.name) private userModel: Model<UserDocument>,
     ) {}
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
-        createUserDto.password = await bcrypt.hash(createUserDto.password, 8)
-        createUserDto.token = await bcrypt.hash(createUserDto.password, 7)
+    async createUser(createUserDto: CreateUserDto): Promise<User> {
+        const emailExists = await this.userModel.findOne({email: createUserDto.email});
+        if(emailExists) {
+            throw new Error('Email already exists. Please try a different one.');
+        }
+        createUserDto.password = await bcrypt.hash(createUserDto.password, 8);
+        createUserDto.token = await bcrypt.hash(createUserDto.password, 7);
         const createdUser = new this.userModel(createUserDto);
         return createdUser.save();
     }
@@ -23,23 +27,22 @@ export class UsersService {
     }
 
     async findById(@Param(':id') id: number | string) {
-        return await this.userModel.findById(id).exec()
+        return await this.userModel.findById(id).exec();
     }
 
-    async login(@Param() params: LoginUserDto) {
-        if (!params.password || !params.email) {
-            return null
-        }
-
+    async signIn(@Param() params: LoginUserDto) {
         try {
-            const user = await this.userModel.findOne({email: params.email})
-            const isPasswordCorrect = await bcrypt.compare(params.password, user.password)
-
+            const user = await this.userModel.findOne({email: params.email});
+            if(!user) {
+                throw new Error('Email does not exist. Please try again.');
+            }
+            const isPasswordCorrect = await bcrypt.compare(params.password, user.password);
             if(!isPasswordCorrect) {
                 throw new Error('Username / password combination is incorrect.');
             }
-            return await bcrypt.hash(user.password, 7);
 
+            user.token = await bcrypt.hash(user.password, 7);
+            return user;
         } catch(e) {
             throw new Error('Username / password combination is incorrect.');
         }

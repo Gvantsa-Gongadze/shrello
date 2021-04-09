@@ -21,11 +21,12 @@ const Login = () => {
     const history = useHistory();
     const onFinish = async (values: loginValue) => {
         try {
-            const user = await axios.post(`http://localhost:3000/users`, {
+            const user = await axios.put(`http://localhost:3000/users`, {
                 password: values.password,
                 email: values.username
             })
             if(user.data) {
+                localStorage.setItem('token', user.data.token);
                 history.push('/home');
             } else {
                 message.info('username / password is incorrect!');
