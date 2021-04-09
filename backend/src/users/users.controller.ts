@@ -47,7 +47,17 @@ export class UsersController {
 
     @Put()
     async signIn(@Body() userDto: LoginUserDto) {
-        return await this.usersService.login(userDto);
+        if(!userDto.password || !userDto.email) {
+            throw new Error('Enter Username and password to login.');
+        }
+
+        const emailExists = await this.userModel.findOne({email: userDto.email});
+        if(!emailExists) {
+            throw new Error('Email does not exist. Please try again.');
+        }
+        const user = await this.usersService.signIn(userDto)
+        delete user.password;
+        return user;
     }
 
     @Get()

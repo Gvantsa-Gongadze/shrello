@@ -26,20 +26,16 @@ export class UsersService {
         return await this.userModel.findById(id).exec()
     }
 
-    async login(@Param() params: LoginUserDto) {
-        if (!params.password || !params.email) {
-            return null
-        }
-
+    async signIn(@Param() params: LoginUserDto) {
         try {
             const user = await this.userModel.findOne({email: params.email})
             const isPasswordCorrect = await bcrypt.compare(params.password, user.password)
-
             if(!isPasswordCorrect) {
                 throw new Error('Username / password combination is incorrect.');
             }
-            return await bcrypt.hash(user.password, 7);
 
+            user.token = await bcrypt.hash(user.password, 7)
+            return user;
         } catch(e) {
             throw new Error('Username / password combination is incorrect.');
         }
