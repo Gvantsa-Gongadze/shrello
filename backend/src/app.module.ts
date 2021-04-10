@@ -7,7 +7,7 @@ import { BoardsModule } from './boards/boards.module';
 
 @Module({
     imports: [
-        MongooseModule.forRoot('mongodb://localhost:27017/shrello',  {
+        MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.fnexl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',  {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
