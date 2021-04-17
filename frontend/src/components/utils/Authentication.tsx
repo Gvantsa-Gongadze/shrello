@@ -16,16 +16,16 @@ const Authentication = ({children}: any) => {
                     return user.token === localStorage.getItem('token');
                 })
                 if(user.length !== 0) {
-                    const currentRout = authenticatedRouts.filter(rout => rout === location.pathname);
-                    if(currentRout.length !== 0) {
-                        history.push(currentRout[0]);
+                    const currentRoute = authenticatedRouts.filter(rout => rout === location.pathname);
+                    if(currentRoute.length !== 0) {
+                        history.push(currentRoute[0]);
                     } else {
                         history.push('/home');
                     }
                 } else {
-                    const currentRout = unauthenticatedRouts.filter(rout => rout === location.pathname);
-                    if(currentRout.length !== 0) {
-                        history.push(currentRout[0]);
+                    const currentRoute = unauthenticatedRouts.filter(rout => rout === location.pathname);
+                    if(currentRoute.length !== 0) {
+                        history.push(currentRoute[0]);
                     } else {
                         history.push('/registration');
                     }
