@@ -1,7 +1,9 @@
 import './App.css'
 import Login from './components/Login'
+import Home from './components/Home'
 import Registration from './components/Registration'
 import EmailConfirmation from './components/EmailConfirmation'
+import Authentication from './components/utils/Authentication'
 import {
     BrowserRouter as Router,
     Switch,
@@ -12,11 +14,14 @@ function App() {
     return (
         <Router>
             <div className="App">
-                <Switch>
-                    <Route path="/login" component={Login} />
-                    <Route path="/registration" component={Registration} />
-                    <Route path="/email-confirmation/:id" component={EmailConfirmation} />
-                </Switch>
+                    <Switch>
+                        <Authentication>
+                            <Route path="/login" component={Login} />
+                            <Route path="/home" component={Home} />
+                            <Route path="/registration" component={Registration} />
+                            <Route path="/email-confirmation/:id" component={EmailConfirmation} />
+                        </Authentication>
+                    </Switch>
             </div>
         </Router>
     );

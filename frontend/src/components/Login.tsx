@@ -26,7 +26,7 @@ const Login = () => {
                 email: values.username
             })
             if(user.data) {
-                localStorage.setItem('token', user.data.token);
+                localStorage.setItem('token', user.data._doc.token);
                 history.push('/home');
             } else {
                 message.info('username / password is incorrect!');
