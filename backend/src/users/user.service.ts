@@ -42,7 +42,7 @@ export class UsersService {
             }
 
             user.token = await bcrypt.hash(user.password, 7);
-            return user;
+            return user.save();
         } catch(e) {
             throw new Error('Username / password combination is incorrect.');
         }
