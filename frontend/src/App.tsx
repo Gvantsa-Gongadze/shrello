@@ -16,8 +16,8 @@ function App() {
             <div className="App">
                 <Switch>
                     <Authentication>
+                        <Route path="/" component={Home} />
                         <Route path="/login" component={Login} />
-                        <Route path="/home" component={Home} />
                         <Route path="/registration" component={Registration} />
                         <Route path="/email-confirmation/:id" component={EmailConfirmation} />
                     </Authentication>

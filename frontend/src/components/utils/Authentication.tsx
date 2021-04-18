@@ -10,33 +10,50 @@ const Authentication = ({children}: any) => {
     const location = useLocation();
 
     useEffect(() => {
+        let isAuthenticated = false;
+
+        const getUserRoute = () => {
+            let currentRoute;
+            let defaultRoute = '/login';
+
+            if(isAuthenticated) {
+                defaultRoute = '/home';
+                currentRoute = authenticatedRouts.find(route => route === location.pathname);
+            } else {
+                defaultRoute = '/login';
+                currentRoute = unauthenticatedRouts.find(route => route === location.pathname);
+            }
+
+            if(currentRoute) {
+                history.push(currentRoute);
+            } else {
+                history.push(defaultRoute);
+            }
+        }
+
         try {
-            axios.get('http://localhost:3000/users').then(res => {
-                const user = res.data.filter((user: any) => {
-                    return user.token === localStorage.getItem('token');
-                })
-                if(user.length !== 0) {
-                    const currentRoute = authenticatedRouts.filter(rout => rout === location.pathname);
-                    if(currentRoute.length !== 0) {
-                        history.push(currentRoute[0]);
+            if(!localStorage.getItem('token')) {
+                isAuthenticated = false;
+                getUserRoute();
+            } else {
+                axios.get('http://localhost:3000/users').then(res => {
+                    const user = res.data.filter((user: any) => {
+                        return user.token === localStorage.getItem('token');
+                    });
+                    if(user.length !== 0) {
+                        isAuthenticated = true;
                     } else {
-                        history.push('/home');
+                        isAuthenticated = false;
                     }
-                } else {
-                    const currentRoute = unauthenticatedRouts.filter(rout => rout === location.pathname);
-                    if(currentRoute.length !== 0) {
-                        history.push(currentRoute[0]);
-                    } else {
-                        history.push('/registration');
-                    }
-                }
-            });
+                    getUserRoute();
+                });
+            }
         } catch(e) {
             console.log(e);
         }
     }, [history, location.pathname])
 
-    return <div>{children}</div>;
+    return <div>{children}</div>
 }
 
 export default Authentication
