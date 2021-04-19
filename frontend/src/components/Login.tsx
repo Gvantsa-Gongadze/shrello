@@ -65,7 +65,7 @@ const Login = () => {
                         name="password"
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
-                        <Input />
+                        <Input.Password />
                     </Form.Item>
 
                     <Form.Item 
