@@ -69,7 +69,7 @@ const Registration = () => {
                         name="password"
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
-                        <Input type="text" minLength={6} />
+                        <Input.Password minLength={6} />
                     </Form.Item>
                     <Form.Item 
                         {...tailLayout}
