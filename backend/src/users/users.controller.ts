@@ -51,8 +51,13 @@ export class UsersController {
     }
 
     @Get()
-    async findAllUsers(): Promise<User[]> {
-        return this.usersService.findAll();
+    async findAllUsers() {
+        const users = await this.usersService.findAll();
+        const filteredUsers = users.map(user => {
+            const { password, ...rest } = user;
+            return rest;
+        })
+        return filteredUsers;
     }
 
     @Get(':id')
