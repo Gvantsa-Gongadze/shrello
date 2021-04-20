@@ -25,9 +25,11 @@ export class UsersService {
     async findAll(): Promise<User[]> {
         return this.userModel.find().exec();
     }
-
     async findById(@Param(':id') id: number | string) {
         return await this.userModel.findById(id).exec();
+    }
+    async findByToken(@Param() token: number | string) {
+        return await this.userModel.findOne({ token: token.toString() }).exec();
     }
 
     async signIn(@Param() params: LoginUserDto) {

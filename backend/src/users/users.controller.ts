@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Headers, Header } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { User } from './schemas/user.schema';
@@ -37,6 +37,17 @@ export class UsersController {
         const updateUser = await this.usersService.signIn(userDto)
         const { password, ...rest } = updateUser;
         return rest;
+    }
+
+    @Get()
+    async findByToken(@Headers('Token') header: string){
+        if(!header) {
+            return this.findAllUsers();
+        }
+        const user = await this.usersService.findByToken(header);
+
+        const { password, ...rest } = user;
+        return rest
     }
 
     @Get()
