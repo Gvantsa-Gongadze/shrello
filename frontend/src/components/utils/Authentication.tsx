@@ -20,15 +20,10 @@ const Authentication = ({children}: any) => {
                 defaultRoute = '/home';
                 currentRoute = authenticatedRouts.find(route => route === location.pathname);
             } else {
-                defaultRoute = '/login';
                 currentRoute = unauthenticatedRouts.find(route => route === location.pathname);
             }
 
-            if(currentRoute) {
-                history.push(currentRoute);
-            } else {
-                history.push(defaultRoute);
-            }
+            currentRoute ? history.push(currentRoute) : history.push(defaultRoute);
         }
 
         try {
@@ -41,7 +36,6 @@ const Authentication = ({children}: any) => {
                         'Token': localStorage.getItem('token')
                     }
                 }).then(res => {
-                    console.log(res)
                     const user = res.data._doc;
                     if(user.length !== 0) {
                         isAuthenticated = true;
