@@ -36,10 +36,13 @@ const Authentication = ({children}: any) => {
                 isAuthenticated = false;
                 getUserRoute();
             } else {
-                axios.get('http://localhost:3000/users').then(res => {
-                    const user = res.data.filter((user: any) => {
-                        return user.token === localStorage.getItem('token');
-                    });
+                axios.get('http://localhost:3000/users', {
+                    headers: {
+                        'Token': localStorage.getItem('token')
+                    }
+                }).then(res => {
+                    console.log(res)
+                    const user = res.data._doc;
                     if(user.length !== 0) {
                         isAuthenticated = true;
                     } else {

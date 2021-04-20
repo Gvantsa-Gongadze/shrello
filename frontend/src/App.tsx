@@ -16,10 +16,10 @@ function App() {
             <div className="App">
                 <Switch>
                     <Authentication>
-                        <Route path="/" component={Home} />
-                        <Route path="/login" component={Login} />
-                        <Route path="/registration" component={Registration} />
-                        <Route path="/email-confirmation/:id" component={EmailConfirmation} />
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/registration" component={Registration} />
+                        <Route exact path="/email-confirmation/:id" component={EmailConfirmation} />
                     </Authentication>
                 </Switch>
             </div>
