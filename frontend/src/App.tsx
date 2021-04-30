@@ -3,7 +3,7 @@ import Login from './components/Login'
 import Home from './components/Home'
 import Registration from './components/Registration'
 import EmailConfirmation from './components/EmailConfirmation'
-import Authentication from './components/utils/Authentication'
+import { AuthProvider } from './components/utils/AuthProvider'
 import {
     BrowserRouter as Router,
     Switch,
@@ -15,12 +15,12 @@ function App() {
         <Router>
             <div className="App">
                 <Switch>
-                    <Authentication>
-                        <Route exact path="/" component={Home} />
+                    <AuthProvider>
+                        <Route exact path={["/", "/home"]} component={Home} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/registration" component={Registration} />
                         <Route exact path="/email-confirmation/:id" component={EmailConfirmation} />
-                    </Authentication>
+                    </AuthProvider>
                 </Switch>
             </div>
         </Router>
