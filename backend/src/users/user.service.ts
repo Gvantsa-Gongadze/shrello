@@ -23,18 +23,18 @@ export class UsersService {
     }
 
     async findAll(): Promise<User[]> {
-        return this.userModel.find().exec();
+        return this.userModel.find({}, {password: 0}).exec();
     }
     async findById(@Param(':id') id: number | string) {
-        return await this.userModel.findById(id).exec();
+        return await this.userModel.findById(id, {password: 0}).exec();
     }
     async findByToken(@Param() token: number | string) {
-        return await this.userModel.findOne({ token: token.toString() }).exec();
+        return await this.userModel.findOne({token: token.toString()}, {password: 0}).exec();
     }
 
     async signIn(@Param() params: LoginUserDto) {
         try {
-            const user = await this.userModel.findOne({email: params.email});
+            const user = await this.userModel.findOne({email: params.email}).exec();
             if(!user) {
                 throw new Error('Email does not exist. Please try again.');
             }

@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put, Headers, Header } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Headers } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto, LoginUserDto } from './dto';
-import { User } from './schemas/user.schema';
 
 @Controller('users')
 export class UsersController {
@@ -40,24 +39,16 @@ export class UsersController {
     }
 
     @Get()
-    async findByToken(@Headers('Token') header: string){
-        if(!header) {
-            return this.findAllUsers();
-        }
-        const user = await this.usersService.findByToken(header);
-
-        const { password, ...rest } = user;
-        return rest
+    async findAllUsers() {
+        return await this.usersService.findAll();
     }
 
-    @Get()
-    async findAllUsers() {
-        const users = await this.usersService.findAll();
-        const filteredUsers = users.map(user => {
-            const { password, ...rest } = user;
-            return rest;
-        })
-        return filteredUsers;
+    @Get('token')
+    async findByToken(@Headers('token') header: string){
+        if(!header) {
+            throw new Error('User was not found');
+        }
+        return await this.usersService.findByToken(header);
     }
 
     @Get(':id')
