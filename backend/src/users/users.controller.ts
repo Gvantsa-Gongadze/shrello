@@ -22,9 +22,7 @@ export class UsersController {
             throw new Error('Invalid email. Please try a different one.');
         }
 
-        const user = await this.usersService.createUser(userDto);
-        const { password, ...rest } = user;
-        return rest;
+        return await this.usersService.createUser(userDto);
     }
 
     @Put()
@@ -33,9 +31,7 @@ export class UsersController {
             throw new Error('Enter Username and password to login.');
         }
 
-        const updateUser = await this.usersService.signIn(userDto)
-        const { password, ...rest } = updateUser;
-        return rest;
+        return await this.usersService.signIn(userDto);
     }
 
     @Get()

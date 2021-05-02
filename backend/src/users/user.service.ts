@@ -11,15 +11,24 @@ export class UsersService {
         @InjectModel(User.name) private userModel: Model<UserDocument>,
     ) {}
 
-    async createUser(createUserDto: CreateUserDto): Promise<User> {
+    async createUser(createUserDto: CreateUserDto) {
         const emailExists = await this.userModel.findOne({email: createUserDto.email});
         if(emailExists) {
             throw new Error('Email already exists. Please try a different one.');
         }
         createUserDto.password = await bcrypt.hash(createUserDto.password, 8);
         createUserDto.token = await bcrypt.hash(createUserDto.password, 7);
-        const createdUser = new this.userModel(createUserDto);
-        return createdUser.save();
+        const userDoc = new this.userModel(createUserDto);
+        const user = await userDoc.save()
+        
+        return {
+            _id: user._id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            token: user.token,
+            boards: user.boards,
+        }
     }
 
     async findAll(): Promise<User[]> {
@@ -44,7 +53,15 @@ export class UsersService {
             }
 
             user.token = await bcrypt.hash(user.password, 7);
-            return user.save();
+            user.save()
+            return {
+                _id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                token: user.token,
+                boards: user.boards,
+            }
         } catch(e) {
             throw new Error('Username / password combination is incorrect.');
         }
