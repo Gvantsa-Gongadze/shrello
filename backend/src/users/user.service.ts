@@ -14,7 +14,7 @@ export class UsersService {
     async createUser(createUserDto: CreateUserDto) {
         const emailExists = await this.userModel.findOne({email: createUserDto.email});
         if(emailExists) {
-            throw new HttpException('Email already exists. Please try a different one.', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Email already exists. Please try a different one.', HttpStatus.FORBIDDEN);
         }
         createUserDto.password = await bcrypt.hash(createUserDto.password, 8);
         createUserDto.token = await bcrypt.hash(createUserDto.password, 7);
@@ -45,11 +45,11 @@ export class UsersService {
         try {
             const user = await this.userModel.findOne({email: params.email}).exec();
             if(!user) {
-                throw new HttpException('Email does not exist. Please try again.', HttpStatus.BAD_REQUEST);
+                throw new HttpException('Email does not exist. Please try again.', HttpStatus.FORBIDDEN);
             }
             const isPasswordCorrect = await bcrypt.compare(params.password, user.password);
             if(!isPasswordCorrect) {
-                throw new HttpException('Username / password combination is incorrect.', HttpStatus.BAD_REQUEST);
+                throw new HttpException('Username / password combination is incorrect.', HttpStatus.UNAUTHORIZED);
             }
 
             user.token = await bcrypt.hash(user.password, 7);
@@ -63,7 +63,7 @@ export class UsersService {
                 boards: user.boards,
             }
         } catch(e) {
-            throw new HttpException('Username / password combination is incorrect.', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Username / password combination is incorrect.', HttpStatus.UNAUTHORIZED);
         }
     }
 

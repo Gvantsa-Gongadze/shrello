@@ -13,13 +13,13 @@ export class UsersController {
     @Post()
     async signUp(@Body() userDto: CreateUserDto) {
         if(!userDto.password || !userDto.email) {
-            throw new HttpException('Enter Username and password for registration.', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Enter Username and password for registration.', HttpStatus.NOT_ACCEPTABLE);
         }
         if(userDto.password.length < 6) {
-            throw new HttpException('Password must be at least 8 characters long.', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Password must be at least 8 characters long.', HttpStatus.NOT_ACCEPTABLE);
         }
         if(!this.regex.test(userDto.email)) {
-            throw new HttpException('Invalid email. Please try a different one.', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Invalid email. Please try a different one.', HttpStatus.NOT_ACCEPTABLE);
         }
 
         return await this.usersService.createUser(userDto);
@@ -28,7 +28,7 @@ export class UsersController {
     @Put()
     async signIn(@Body() userDto: LoginUserDto) {
         if(!userDto.password || !userDto.email) {
-            throw new HttpException('Enter Username and password to login.', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Enter Username and password to login.', HttpStatus.NOT_ACCEPTABLE);
         }
         return await this.usersService.signIn(userDto);
     }
@@ -41,7 +41,7 @@ export class UsersController {
     @Get('token')
     async findByToken(@Headers('token') header: string){
         if(!header) {
-            throw new HttpException('User was not found.', HttpStatus.BAD_REQUEST);
+            throw new HttpException('User was not found.', HttpStatus.NOT_FOUND);
         }
         return await this.usersService.findByToken(header);
     }
