@@ -1,8 +1,22 @@
-import { useAuth } from "./utils/AuthProvider"
+import { useHistory } from "react-router-dom";
+import { LOCAL_STORAGE_TOKEN_KEY } from "../hooks/api.hook";
+import { useAuth } from "../providers/AuthProvider"
 
 const Home = () => {
+    const history = useHistory()
     const { user } = useAuth()
-    console.log(user);
-    return <div>Home</div>
+    
+    return (
+        <section>
+            <div>
+                {user?.firstName}
+                {user?.lastName}
+            </div>
+            <button onClick={() => {
+                localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
+                history.replace('/login')
+            }}>Logout</button>
+        </section>
+    )
 }
 export default Home
