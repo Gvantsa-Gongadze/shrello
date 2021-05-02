@@ -1,4 +1,4 @@
-import { Injectable, Param } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
@@ -14,7 +14,7 @@ export class UsersService {
     async createUser(createUserDto: CreateUserDto) {
         const emailExists = await this.userModel.findOne({email: createUserDto.email});
         if(emailExists) {
-            throw new Error('Email already exists. Please try a different one.');
+            throw new HttpException('Email already exists. Please try a different one.', HttpStatus.FORBIDDEN);
         }
         createUserDto.password = await bcrypt.hash(createUserDto.password, 8);
         createUserDto.token = await bcrypt.hash(createUserDto.password, 7);
@@ -45,11 +45,11 @@ export class UsersService {
         try {
             const user = await this.userModel.findOne({email: params.email}).exec();
             if(!user) {
-                throw new Error('Email does not exist. Please try again.');
+                throw new HttpException('Email does not exist. Please try again.', HttpStatus.FORBIDDEN);
             }
             const isPasswordCorrect = await bcrypt.compare(params.password, user.password);
             if(!isPasswordCorrect) {
-                throw new Error('Username / password combination is incorrect.');
+                throw new HttpException('Username / password combination is incorrect.', HttpStatus.UNAUTHORIZED);
             }
 
             user.token = await bcrypt.hash(user.password, 7);
@@ -63,7 +63,7 @@ export class UsersService {
                 boards: user.boards,
             }
         } catch(e) {
-            throw new Error('Username / password combination is incorrect.');
+            throw new HttpException('Username / password combination is incorrect.', HttpStatus.UNAUTHORIZED);
         }
     }
 

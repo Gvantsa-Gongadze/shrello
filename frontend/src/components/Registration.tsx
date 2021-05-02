@@ -22,8 +22,6 @@ const Registration = () => {
         if (isSuccess) {
             history.push('/home');
             message.success('Registration successful!')
-        } else {
-            message.error('Error signing up the user')
         }
     };
 
@@ -81,7 +79,7 @@ const Registration = () => {
                         <SubmitButton name={'Sign up'}/>
                     </Form.Item>
                     <Link to="/login">
-                    Already have an account? Log In
+                        Already have an account? Log In
                     </Link>
                 </Form>
             </Card>

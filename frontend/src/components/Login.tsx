@@ -2,7 +2,6 @@ import { Form, Input, Checkbox, Card, Space } from 'antd'
 import SubmitButton from '../styles/Buttons'
 import { Link, useHistory } from "react-router-dom";
 import { useApi, LoginValues } from '../hooks/api.hook';
-import { message } from 'antd';
 
 const layout = {
     labelCol: { span: 8 },
@@ -20,8 +19,6 @@ const Login = () => {
         const isSuccess = await login(values);
         if(isSuccess) {
             history.push('/home');
-        } else {
-            message.info('username / password is incorrect!');
         }
     };
 
