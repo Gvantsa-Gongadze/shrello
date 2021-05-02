@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Headers } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Headers, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 
@@ -13,13 +13,13 @@ export class UsersController {
     @Post()
     async signUp(@Body() userDto: CreateUserDto) {
         if(!userDto.password || !userDto.email) {
-            throw new Error('Enter Username and password for registration.');
+            throw new HttpException('Enter Username and password for registration.', HttpStatus.BAD_REQUEST);
         }
         if(userDto.password.length < 6) {
-            throw new Error('Password must be at least 8 characters long.');
+            throw new HttpException('Password must be at least 8 characters long.', HttpStatus.BAD_REQUEST);
         }
         if(!this.regex.test(userDto.email)) {
-            throw new Error('Invalid email. Please try a different one.');
+            throw new HttpException('Invalid email. Please try a different one.', HttpStatus.BAD_REQUEST);
         }
 
         return await this.usersService.createUser(userDto);
@@ -28,9 +28,8 @@ export class UsersController {
     @Put()
     async signIn(@Body() userDto: LoginUserDto) {
         if(!userDto.password || !userDto.email) {
-            throw new Error('Enter Username and password to login.');
+            throw new HttpException('Enter Username and password to login.', HttpStatus.BAD_REQUEST);
         }
-
         return await this.usersService.signIn(userDto);
     }
 
@@ -42,7 +41,7 @@ export class UsersController {
     @Get('token')
     async findByToken(@Headers('token') header: string){
         if(!header) {
-            throw new Error('User was not found');
+            throw new HttpException('User was not found.', HttpStatus.BAD_REQUEST);
         }
         return await this.usersService.findByToken(header);
     }
