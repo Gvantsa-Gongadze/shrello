@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useCallback } from "react";
 import { AuthUser } from "../types";
+import { message } from 'antd';
 
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 
@@ -27,8 +28,8 @@ export function useApi() {
             })
 
             return response.data
-        } catch(e) {
-            console.error(e)
+        } catch(error) {
+            message.error(error.response.data.message)
             return null
         }
     }
@@ -39,13 +40,12 @@ export function useApi() {
             localStorage.setItem('token', user.data.token);
             return true
         } catch (error) {
-            console.error(error)
+            message.error(error.response.data.message)
             return false
         }
     }
 
     const login = async (values: LoginValues) => {
-
         try {
             const user = await axios.put(`http://localhost:3000/users`, {
                 password: values.password,
@@ -54,7 +54,7 @@ export function useApi() {
             localStorage.setItem('token', user.data.token);
             return true
         } catch (error) {
-            console.log(error)
+            message.error(error.response.data.message)
             return false
         }
     }
