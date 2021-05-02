@@ -1,8 +1,8 @@
 import { Form, Input, Checkbox, Card, Space } from 'antd'
-import SubmitButton from './style/Buttons'
-import { useHistory } from "react-router-dom";
+import SubmitButton from '../styles/Buttons'
+import { Link, useHistory } from "react-router-dom";
+import { useApi, LoginValues } from '../hooks/api.hook';
 import { message } from 'antd';
-import axios from 'axios';
 
 const layout = {
     labelCol: { span: 8 },
@@ -11,28 +11,17 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
-interface loginValue {
-    password: String;
-    remember: Boolean;
-    username: String;
-}
 
 const Login = () => {
     const history = useHistory();
-    const onFinish = async (values: loginValue) => {
-        try {
-            const user = await axios.put(`http://localhost:3000/users`, {
-                password: values.password,
-                email: values.username
-            })
-            if(user.data) {
-                localStorage.setItem('token', user.data.token);
-                history.push('/home');
-            } else {
-                message.info('username / password is incorrect!');
-            }
-        } catch (error) {
-            console.log(error)
+    const { login } = useApi()
+
+    const onFinish = async (values: LoginValues) => {
+        const isSuccess = await login(values);
+        if(isSuccess) {
+            history.push('/home');
+        } else {
+            message.info('username / password is incorrect!');
         }
     };
 
@@ -79,7 +68,9 @@ const Login = () => {
                     <Form.Item {...tailLayout}>
                         <SubmitButton name={'Log in'}/>
                     </Form.Item>
-                    <a href="/registration">Sign up for an account</a>
+                    <Link to="/registration">
+                        Sign up for an account
+                    </Link>
                 </Form>
             </Card>
         </Space>

@@ -1,9 +1,8 @@
-import { Form, Input, Checkbox, Card, Space } from 'antd';
-import { useHistory } from "react-router-dom";
-import SubmitButton from './style/Buttons';
-import { message } from 'antd';
-import axios from 'axios';
 import React from 'react';
+import { Form, Input, Checkbox, Card, Space, message } from 'antd';
+import { Link, useHistory } from "react-router-dom";
+import SubmitButton from '../styles/Buttons';
+import { useApi, RegisterValues } from '../hooks/api.hook';
 
 const layout = {
     labelCol: { span: 8 },
@@ -14,18 +13,17 @@ const tailLayout = {
 };
 const Registration = () => {
     const history = useHistory();
-    const onFinish = async (values: any) => {
-        try {
-            const user = await axios.post("http://localhost:3000/users", values);
-            if(!user.data) {
-                message.info('Something went wrong. Try again');
-            }
-            localStorage.setItem('token', user.data.token);
+
+    const { register } = useApi()
+    
+    const onFinish = async (values: RegisterValues) => {
+        const isSuccess = await register(values)
+
+        if (isSuccess) {
             history.push('/home');
-            // message.info('Message Sent. Please check your email for confirmation!');
-        } catch (error) {
-            message.info('Message failed to send. Try again!');
-            console.log(error)
+            message.success('Registration successful!')
+        } else {
+            message.error('Error signing up the user')
         }
     };
 
@@ -82,7 +80,9 @@ const Registration = () => {
                     <Form.Item {...tailLayout}>
                         <SubmitButton name={'Sign up'}/>
                     </Form.Item>
-                    <a href="/login">Already have an account? Log In</a>
+                    <Link to="/login">
+                    Already have an account? Log In
+                    </Link>
                 </Form>
             </Card>
         </Space>

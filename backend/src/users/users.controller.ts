@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Headers } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto, LoginUserDto } from './dto';
-import { User } from './schemas/user.schema';
 
 @Controller('users')
 export class UsersController {
@@ -23,9 +22,7 @@ export class UsersController {
             throw new Error('Invalid email. Please try a different one.');
         }
 
-        const user = await this.usersService.createUser(userDto);
-        const { password, ...rest } = user;
-        return rest;
+        return await this.usersService.createUser(userDto);
     }
 
     @Put()
@@ -34,14 +31,20 @@ export class UsersController {
             throw new Error('Enter Username and password to login.');
         }
 
-        const updateUser = await this.usersService.signIn(userDto)
-        const { password, ...rest } = updateUser;
-        return rest;
+        return await this.usersService.signIn(userDto);
     }
 
     @Get()
-    async findAllUsers(): Promise<User[]> {
-        return this.usersService.findAll();
+    async findAllUsers() {
+        return await this.usersService.findAll();
+    }
+
+    @Get('token')
+    async findByToken(@Headers('token') header: string){
+        if(!header) {
+            throw new Error('User was not found');
+        }
+        return await this.usersService.findByToken(header);
     }
 
     @Get(':id')
