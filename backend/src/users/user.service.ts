@@ -2,8 +2,10 @@ import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
+import { sendEmail } from '../utils/SendEmail'
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
+import { confirmEmailLink } from 'src/utils/ConfirmEmailLink';
 
 @Injectable()
 export class UsersService {
@@ -66,15 +68,34 @@ export class UsersService {
             throw new HttpException('Username / password combination is incorrect.', HttpStatus.UNAUTHORIZED);
         }
     }
+    async findByEmail(email: string) {
+        const user = await this.userModel.findOne({email: email.toString()}, {password: 0}).exec()
+        if(!user) {
+            throw new HttpException('Incorrect email. Please try again.', HttpStatus.UNAUTHORIZED);
+        }
+        sendEmail(email, confirmEmailLink(user._id));
+        return user
+    }
+
+    async resetPassword({id, password}) {
+        const user = await this.userModel.findOne({_id: id.toString()}, {password: 0}).exec()
+        if(!user) {
+            throw new HttpException('Incorrect email. Please try again.', HttpStatus.UNAUTHORIZED);
+        }
+        user.password = await bcrypt.hash(password, 8);
+        user.token = await bcrypt.hash(password, 7);
+        user.save()
+        return user
+    }
 
     async updateById(@Param(':id') id, updateUser: UpdateUserDto) {
-        const updateUserDto = await this.findById(id);
+        const updateUserDto = await this.userModel.findById(id);
         const updateKeys = Object.keys(updateUser);
         updateKeys.map(updateKey => {
             if(updateUserDto[updateKey] !== undefined) {
                 updateUserDto[updateKey] = updateUser[updateKey]
             }
         })
-        return updateUserDto.save()
+        return await updateUserDto.save()
     }
 }
