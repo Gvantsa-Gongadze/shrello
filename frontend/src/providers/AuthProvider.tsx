@@ -18,7 +18,7 @@ const AuthContext = createContext<{
     }
 });
 
-const publicRoutes = ['/login', '/registration'];
+const publicRoutes = ['/login', '/registration', '/forgot-password'];
 
 interface AuthProviderProps {
     children: ReactNode
