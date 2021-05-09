@@ -77,18 +77,17 @@ export class UsersService {
         return user
     }
 
-    async resetPassword({id, password}) {
-        const user = await this.userModel.findOne({_id: id.toString()}, {password: 0}).exec()
+    async resetPassword(@Param() params: {id: string, password: string}) {
+        const user = await this.userModel.findOne({_id: params.id.toString()}).exec()
         if(!user) {
             throw new HttpException('Incorrect email. Please try again.', HttpStatus.UNAUTHORIZED);
         }
-        user.password = await bcrypt.hash(password, 8);
-        user.token = await bcrypt.hash(password, 7);
-        user.save()
-        return user
+        user.password = await bcrypt.hash(params.password, 8);
+        user.token = await bcrypt.hash(params.password, 7);
+        return await user.save()
     }
 
-    async updateById(@Param(':id') id, updateUser: UpdateUserDto) {
+    async updateById(@Param(':id') id: string, updateUser: UpdateUserDto) {
         const updateUserDto = await this.userModel.findById(id);
         const updateKeys = Object.keys(updateUser);
         updateKeys.map(updateKey => {
