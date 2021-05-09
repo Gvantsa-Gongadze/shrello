@@ -24,22 +24,28 @@ const ResetPassword = () => {
                 message.error('No user found!')
                 return
             }
-            const user = await axios.get(`http://localhost:3000/users/${userId}`)
 
-            if(!user) {
-                message.error('No user found!')
-                return
+            try {
+                const user = await axios.get(`http://localhost:3000/users/${userId}`)
+                localStorage.setItem('token', user.data.token);
+                history.push(`/reset-password/${userId}`);
+            } catch(error) {
+                message.error(error.response.data.message)
             }
-            localStorage.setItem('token', user.data.token);
-            history.push(`/reset-password/${userId}`);
         }
         fetchData()
       }, [history, userId]);
     const onFinish = async (value: {password: string}) => {
-        await axios.put(`http://localhost:3000/users/reset-password`, {
-            id: userId,
-            password: value.password
-        })
+        try {
+            await axios.put(`http://localhost:3000/users/reset-password`, {
+                id: userId,
+                password: value.password
+            })
+            localStorage.removeItem('token');
+            history.replace('/login');
+        } catch(error) {
+            message.error(error.response.data.message)
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {

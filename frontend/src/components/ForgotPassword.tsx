@@ -1,6 +1,5 @@
 import { Form, Input, Card, Space, message } from 'antd';
 import axios from 'axios';
-import { useState } from "react";
 import SubmitButton from '../styles/Buttons';
 
 
@@ -12,14 +11,13 @@ const tailLayout = {
     wrapperCol: { offset: 4, span: 16 },
 };
 const ForgotPassword = () => {
-    const [mailerState, setMailerState] = useState({
-        email: ''
-    });
     const onFinish = async (value: {email: string}) => {
-        setMailerState(value);
         try {
+            if(!value.email) {
+                message.error('Please, enter email!')
+            }
             await axios.put(`http://localhost:3000/users/email-confirmation`, {
-                email: mailerState.email
+                email: value?.email
             })
             message.success('Please, check your email.')
 
@@ -29,7 +27,8 @@ const ForgotPassword = () => {
     };
 
     const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
+        message.error(errorInfo?.errorFields[0]?.errors)
+        return
     };
     return (
         <Space>
