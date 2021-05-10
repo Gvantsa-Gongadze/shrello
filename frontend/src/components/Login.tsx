@@ -1,5 +1,5 @@
-import { Form, Input, Checkbox, Card, Space } from 'antd'
-import SubmitButton from '../styles/Buttons'
+import { Form, Input, Checkbox, Card, Space } from 'antd';
+import SubmitButton from '../styles/Buttons';
 import { Link, useHistory } from "react-router-dom";
 import { useApi, LoginValues } from '../hooks/api.hook';
 
@@ -13,7 +13,7 @@ const tailLayout = {
 
 const Login = () => {
     const history = useHistory();
-    const { login } = useApi()
+    const { login } = useApi();
 
     const onFinish = async (values: LoginValues) => {
         const isSuccess = await login(values);
@@ -44,7 +44,7 @@ const Login = () => {
                         name="username"
                         rules={[{ required: true, message: 'Please input your username!' }]}
                     >
-                        <Input />
+                        <Input type="email" />
                     </Form.Item>
                     <Form.Item
                         label="Password"
@@ -53,7 +53,9 @@ const Login = () => {
                     >
                         <Input.Password />
                     </Form.Item>
-
+                    <Link to="/forgot-password">
+                        Forgot password?
+                    </Link>
                     <Form.Item 
                         {...tailLayout}
                         name="remember" 

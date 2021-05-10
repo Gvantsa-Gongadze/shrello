@@ -46,6 +46,22 @@ export class UsersController {
         return await this.usersService.findByToken(header);
     }
 
+    @Put('email-confirmation')
+    async findByEmail(@Body() userDto: { email: string }){
+        if(!userDto.email) {
+            throw new HttpException('User was not found.', HttpStatus.NOT_FOUND);
+        }
+        return await this.usersService.findByEmail(userDto.email);
+    }
+
+    @Put('reset-password')
+    async resetPassword(@Body() userDto: {id: string, password: string }){
+        if(!userDto.password && !userDto.id) {
+            throw new HttpException('User was not found.', HttpStatus.NOT_FOUND);
+        }
+        return await this.usersService.resetPassword(userDto);
+    }
+
     @Get(':id')
     async findById(@Param() params: {id: string | number} ){
         return this.usersService.findById(params.id);
