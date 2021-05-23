@@ -1,6 +1,6 @@
 import { Form, Input, Card, Space, message } from 'antd';
 import axios from 'axios';
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import SubmitButton from '../styles/Buttons';
 
@@ -54,8 +54,9 @@ const ResetPassword = () => {
     return (
         <Space>
             <Card 
-                title="Reset Password" 
-                style={{ width: 500 }}
+                title='Reset Password' 
+                headStyle={{ backgroundColor: '#edc7b7', padding: '5px', borderTopLeftRadius: '15px', borderTopRightRadius: '15px', fontSize: '23px', marginBottom: '15px' }}
+                style={{ width: 500, borderRadius: '15px' }}
             >
                 <Form
                     {...layout}
@@ -65,11 +66,11 @@ const ResetPassword = () => {
                     onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
-                        label="Password"
-                        name="password"
+                        label='Password'
+                        name='password'
                         rules={[{ required: true, message: 'Please input your new password!' }]}
                     >
-                        <Input.Password />
+                        <Input.Password minLength={6} placeholder='Enter new password' />
                     </Form.Item>
                     <Form.Item {...tailLayout}>
                         <SubmitButton name={'Update password'}/>
