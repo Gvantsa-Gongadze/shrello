@@ -32,30 +32,31 @@ const ForgotPassword = () => {
     };
     return (
         <Space>
-        <Card 
-            title="Enter Email To Reset Password" 
-            style={{ width: 500 }}
-        >
-            <Form
-                {...layout}
-                name='basic'
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+            <Card 
+                title='Enter Email To Reset Password' 
+                headStyle={{ backgroundColor: '#edc7b7', padding: '5px', borderTopLeftRadius: '15px', borderTopRightRadius: '15px', fontSize: '23px', marginBottom: '15px' }}
+                style={{ width: 500, borderRadius: '15px' }}
             >
-                <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[{ required: true, message: 'Please input your email!' }]}
+                <Form
+                    {...layout}
+                    name='basic'
+                    initialValues={{ remember: true }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
                 >
-                    <Input type="email" />
-                </Form.Item>
-                <Form.Item {...tailLayout}>
-                    <SubmitButton name={'Reset my password'}/>
-                </Form.Item>
-            </Form>
-        </Card>
-    </Space>
+                    <Form.Item
+                        label='Email'
+                        name='email'
+                        rules={[{ required: true, message: 'Please input your email!' }]}
+                    >
+                        <Input type='email' placeholder='Enter your email' />
+                    </Form.Item>
+                    <Form.Item {...tailLayout}>
+                        <SubmitButton name={'Reset my password'}/>
+                    </Form.Item>
+                </Form>
+            </Card>
+        </Space>
     )
 }
 export default ForgotPassword

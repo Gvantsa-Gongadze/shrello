@@ -1,6 +1,6 @@
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { LOCAL_STORAGE_TOKEN_KEY } from "../hooks/api.hook";
-import { useAuth } from "../providers/AuthProvider"
+import { useAuth } from '../providers/AuthProvider'
 
 const Home = () => {
     const history = useHistory()

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Input, Checkbox, Card, Space, message } from 'antd';
-import { Link, useHistory } from "react-router-dom";
+import { Form, Input, Card, Space, message } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
 import SubmitButton from '../styles/Buttons';
 import { useApi, RegisterValues } from '../hooks/api.hook';
 
@@ -31,8 +31,9 @@ const Registration = () => {
     return (
         <Space>
             <Card 
-                title="Sign up for your account" 
-                style={{ width: 500 }}
+                title='Sign up for your account' 
+                headStyle={{ backgroundColor: '#edc7b7', padding: '5px', borderTopLeftRadius: '15px', borderTopRightRadius: '15px', fontSize: '23px', marginBottom: '15px' }}
+                style={{ width: 500, borderRadius: '15px' }}
             >
                 <Form
                     {...layout}
@@ -42,43 +43,35 @@ const Registration = () => {
                     onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
-                        label="Your name"
-                        name="firstName"
+                        label='Your name'
+                        name='firstName'
                         >
-                        <Input type="text" />
+                        <Input type='text' placeholder='Enter name' />
                     </Form.Item>
                     <Form.Item
-                        label="Your last name"
-                        name="lastName"
+                        label='Your last name'
+                        name='lastName'
                         >
-                        <Input type="text" />
+                        <Input type='text' placeholder='Enter last name' />
                     </Form.Item>
                     <Form.Item
-                        label="Your Email"
-                        name="email"
+                        label='Your Email'
+                        name='email'
                         rules={[{ required: true, message: 'Please input your Email!' }]}
                     >
-                        <Input type="email" />
+                        <Input type='email' placeholder='Enter email' />
                     </Form.Item>
                     <Form.Item
-                        label="Password"
-                        name="password"
+                        label='Password'
+                        name='password'
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
-                        <Input.Password minLength={6} />
+                        <Input.Password minLength={6} placeholder='Enter password' />
                     </Form.Item>
-                    <Form.Item 
-                        {...tailLayout}
-                        name="remember" 
-                        valuePropName="checked"
-                    >
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-
                     <Form.Item {...tailLayout}>
                         <SubmitButton name={'Sign up'}/>
                     </Form.Item>
-                    <Link to="/login">
+                    <Link to='/login'>
                         Already have an account? Log In
                     </Link>
                 </Form>

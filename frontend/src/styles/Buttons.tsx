@@ -1,23 +1,23 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const StyledButton = styled.button`
     cursor: pointer;
     color: white;
     font-size: 1em;
     padding: 0.25em 1em;
-    border: 2px solid #1890ff;
     border-radius: 5px;
-    background-color: #1890ff;
+    border: 2px solid #4485fa;
+    background-color: #4485fa;
     transition: all 0.3s;
 
-    :hover {
-        border: 2px solid #40a9ff;
-        background-color: #40a9ff;;
+    &:hover {
+        border: 2px solid #6597f3;
+        background-color: #6597f3;
     }
 `;
 
 const SubmitButton = ({ name='Log in' }) => {
-    return <StyledButton type="submit">{name}</StyledButton>
+    return <StyledButton type='submit'>{name}</StyledButton>
 }
 
 export default SubmitButton
